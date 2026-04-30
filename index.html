@@ -71,22 +71,18 @@
             position: absolute;
             top: 0; 
             right: calc(100% + 20px); 
-            
             display: flex;
             flex-direction: row; 
             align-items: center;
             gap: 15px;
             padding: 10px 20px;
-
             border: 1px solid var(--gold-mid);
             background: rgba(0, 0, 0, 0.9);
             border-radius: 50px;
-
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
             transform: translateX(30px); 
-            
             transition: 
                 opacity 0.4s ease, 
                 transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
@@ -143,7 +139,6 @@
             </div>
             <span id="karat-selector-trigger" class="gold" onclick="toggleMenu(event)">24k</span>
         </span>
-        <!-- Added inline style to allow Capital G despite body lowercase rule -->
         <span class="gold" style="text-transform: none;">Gold price today is</span>
     </div>
 
@@ -157,7 +152,7 @@
     let currentKarat = 24;
     const apiKey = "sk_76C084a8211A6551c0f887290fb164DbAD82316F0f176661";
 
-    async function fetchPrice() {
+    async function refreshBasePrice() {
         try {
             const response = await fetch("https://gold.g.apised.com/v1/latest?metals=XAU&base_currency=KWD&currencies=EGP&weight_unit=gram", {
                 method: "GET",
@@ -168,9 +163,16 @@
                 base24kPrice = parseFloat(data.rates.XAU.EGP);
             }
         } catch (err) {
-            console.warn("API Offline: Using Heartbeat Mode");
+            console.warn("API Sync Offline");
         }
-        updateUI();
+    }
+
+    function updateUI() {
+        const price = base24kPrice * (currentKarat / 24);
+        document.getElementById('price-value').innerText = price.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
     }
 
     function toggleMenu(event) {
@@ -185,28 +187,19 @@
         updateUI();
     }
 
-    function updateUI() {
-        const price = base24kPrice * (currentKarat / 24);
-        document.getElementById('price-value').innerText = price.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
     window.onclick = function() {
         const menu = document.getElementById('karat-menu');
-        if (menu.classList.contains('active')) {
-            menu.classList.remove('active');
-        }
+        if (menu.classList.contains('active')) menu.classList.remove('active');
     }
 
-    fetchPrice();
+    refreshBasePrice();
 
     setInterval(() => {
-        base24kPrice += (Math.random() - 0.5) * 0.6;
+        base24kPrice += (Math.random() - 0.5) * 0.4;
         updateUI();
-        if (Math.floor(Date.now() / 1000) % 30 === 0) fetchPrice();
     }, 3000);
+
+    setInterval(refreshBasePrice, 30000);
 </script>
 </body>
 </html>
