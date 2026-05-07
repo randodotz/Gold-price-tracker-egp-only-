@@ -23,6 +23,7 @@
             font-family: 'Arimo', sans-serif;
             text-transform: lowercase;
             overflow: hidden;
+            color: #white;
         }
 
         .container {
@@ -123,6 +124,106 @@
             margin-left: 10px;
             letter-spacing: -1.5px;
         }
+
+        /* --- Fixed Button & Modal Styles --- */
+        .notify-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 1px solid var(--gold-mid);
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Arimo', sans-serif;
+            font-size: 1rem;
+            text-transform: lowercase;
+            color: var(--gold-light);
+            transition: all 0.3s ease;
+        }
+
+        /* Eliminates conflict with .gold text-clip rules on buttons */
+        .notify-btn.gold {
+            -webkit-text-fill-color: var(--gold-light) !important;
+            color: var(--gold-light) !important;
+            background: transparent;
+        }
+
+        .notify-btn:hover {
+            background: var(--gold-mid);
+            color: #000 !important;
+            -webkit-text-fill-color: #000 !important;
+            box-shadow: 0 0 15px var(--gold-mid);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.95);
+            border: 1.5px solid var(--gold-mid);
+            padding: 30px;
+            border-radius: 15px;
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(179, 135, 40, 0.3);
+            box-sizing: border-box;
+        }
+
+        .modal.active { 
+            display: block; 
+        }
+
+        .modal h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: left;
+        }
+
+        .modal input, .modal select {
+            background: #111;
+            border: 1px solid rgba(179, 135, 40, 0.5);
+            color: var(--gold-white);
+            padding: 12px;
+            margin: 8px 0 20px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 8px;
+            font-family: 'Arimo', sans-serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .modal input:focus, .modal select:focus {
+            border-color: var(--gold-light);
+        }
+
+        .modal label {
+            display: block;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--gold-mid);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-actions .notify-btn {
+            margin-top: 10px;
+        }
+
+        .status-tag {
+            font-size: 1rem;
+            margin-top: 15px;
+            color: var(--gold-light);
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -145,12 +246,46 @@
     <div class="price-container">
         <span id="price-value" class="gold">7,834.50</span><span class="currency gold">le</span>
     </div>
+
+    <button class="notify-btn gold" onclick="openModal()">set alert</button>
+    <div id="alert-status" class="status-tag">alert active...</div>
+</div>
+
+<div id="notifyModal" class="modal">
+    <h3 class="gold">alert settings</h3>
+    
+    <label>target price (le)</label>
+    <input type="number" id="targetPrice" step="0.01" placeholder="e.g. 7800">
+    
+    <label>select karat</label>
+    <select id="targetKarat">
+        <option value="24">24k</option>
+        <option value="22">22k</option>
+        <option value="21">21k</option>
+        <option value="18">18k</option>
+        <option value="14">14k</option>
+    </select>
+
+    <label>require rechecks (stability)</label>
+    <input type="number" id="targetChecks" value="5" min="1">
+
+    <div class="modal-actions">
+        <button class="notify-btn gold" onclick="setNotification()">save alert</button>
+        <button class="notify-btn" style="border: none; color: #888;" onclick="closeModal()">cancel</button>
+    </div>
 </div>
 
 <script>
     let base24kPrice = 7834.50;
     let currentKarat = 24;
     const apiKey = "sk_76C084a8211A6551c0f887290fb164DbAD82316F0f176661";
+
+    // Alert Handling States
+    let alertActive = false;
+    let targetPrice = 0;
+    let targetKarat = 24;
+    let requiredHits = 5;
+    let hitCounter = 0;
 
     async function refreshBasePrice() {
         try {
@@ -173,6 +308,75 @@
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+        checkAlertCondition();
+    }
+
+    function checkAlertCondition() {
+        if (!alertActive) return;
+
+        // Calculate specific price based on selected alert karat
+        const currentAlertPrice = base24kPrice * (targetKarat / 24);
+        
+        // Match base prices to 2 decimal places
+        if (currentAlertPrice.toFixed(2) === parseFloat(targetPrice).toFixed(2)) {
+            hitCounter++;
+            console.log(`Matching target! ${hitCounter}/${requiredHits} checks passed.`);
+            
+            if (hitCounter >= requiredHits) {
+                sendNotification(currentAlertPrice);
+                alertActive = false; // Reset watcher
+                document.getElementById('alert-status').style.display = 'none';
+            }
+        } else {
+            hitCounter = 0; // Reset counter instantly if price changes
+        }
+    }
+
+    function sendNotification(price) {
+        if (Notification.permission === "granted") {
+            new Notification("Gold Price Matched!", {
+                body: `${targetKarat}k gold reached ${price.toFixed(2)} le and stayed for ${requiredHits} checks!`,
+                icon: "https://cdn-icons-png.flaticon.com/512/261/261835.png"
+            });
+        } else {
+            alert(`alert: ${targetKarat}k gold reached ${price.toFixed(2)} le and remained stable!`);
+        }
+    }
+
+    function openModal() {
+        document.getElementById('notifyModal').classList.add('active');
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('notifyModal').classList.remove('active');
+    }
+
+    function setNotification() {
+        targetPrice = document.getElementById('targetPrice').value;
+        targetKarat = document.getElementById('targetKarat').value;
+        requiredHits = parseInt(document.getElementById('targetChecks').value, 10);
+
+        if (!targetPrice || isNaN(targetPrice)) {
+            alert("please enter a valid target price");
+            return;
+        }
+
+        if (isNaN(requiredHits) || requiredHits < 1) {
+            alert("checks must be at least 1");
+            return;
+        }
+
+        alertActive = true;
+        hitCounter = 0;
+        
+        const statusElement = document.getElementById('alert-status');
+        statusElement.innerText = `watching for ${targetKarat}k to hit ${parseFloat(targetPrice).toFixed(2)} le...`;
+        statusElement.style.display = 'block';
+        
+        closeModal();
     }
 
     function toggleMenu(event) {
@@ -194,6 +398,7 @@
 
     refreshBasePrice();
 
+    // Fluctuating simulation
     setInterval(() => {
         base24kPrice += (Math.random() - 0.5) * 0.4;
         updateUI();
