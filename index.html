@@ -26,19 +26,10 @@
             color: white;
         }
 
-        .container {
-            text-align: center;
-        }
+        .container { text-align: center; }
 
         .gold {
-            background: linear-gradient(
-                to bottom,
-                var(--gold-deep) 0%,
-                var(--gold-mid) 30%,
-                var(--gold-white) 50%,
-                var(--gold-mid) 70%,
-                var(--gold-deep) 100%
-            );
+            background: linear-gradient(to bottom, var(--gold-deep) 0%, var(--gold-mid) 30%, var(--gold-white) 50%, var(--gold-mid) 70%, var(--gold-deep) 100%);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
@@ -57,137 +48,49 @@
             gap: 0.3ch;
         }
 
-        .trigger-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        #karat-selector-trigger {
-            text-decoration: underline;
-            cursor: pointer;
-            display: inline-block;
-        }
+        .trigger-wrapper { position: relative; display: inline-block; }
+        #karat-selector-trigger { text-decoration: underline; cursor: pointer; display: inline-block; }
 
         #karat-menu {
-            position: absolute;
-            top: 0; 
-            right: calc(100% + 20px); 
-            display: flex;
-            flex-direction: row; 
-            align-items: center;
-            gap: 15px;
-            padding: 10px 20px;
-            border: 1px solid var(--gold-mid);
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 50px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: translateX(30px); 
-            transition: 0.4s;
-            z-index: 100;
+            position: absolute; top: 0; right: calc(100% + 20px); 
+            display: flex; flex-direction: row; align-items: center; gap: 15px;
+            padding: 10px 20px; border: 1px solid var(--gold-mid);
+            background: rgba(0, 0, 0, 0.9); border-radius: 50px;
+            opacity: 0; visibility: hidden; pointer-events: none;
+            transform: translateX(30px); transition: 0.4s; z-index: 100;
         }
 
-        #karat-menu.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateX(0);
-        }
+        #karat-menu.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(0); }
+        .karat-option { font-size: 1.2rem; cursor: pointer; opacity: 0.6; transition: 0.2s; }
+        .karat-option:hover { opacity: 1; transform: scale(1.2); }
 
-        .karat-option {
-            font-size: 1.2rem;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: 0.2s;
-        }
-
-        .karat-option:hover {
-            opacity: 1;
-            transform: scale(1.2);
-        }
-
-        .price-container {
-            font-size: 7.5rem;
-            letter-spacing: -4px;
-            line-height: 0.85;
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-        }
-
-        .currency {
-            font-size: 3rem;
-            margin-left: 10px;
-            letter-spacing: -1.5px;
-        }
+        .price-container { font-size: 7.5rem; letter-spacing: -4px; line-height: 0.85; display: flex; align-items: baseline; justify-content: center; }
+        .currency { font-size: 3rem; margin-left: 10px; letter-spacing: -1.5px; }
 
         .notify-btn {
-            margin-top: 30px;
-            padding: 12px 30px;
-            background: transparent;
-            border: 1px solid var(--gold-mid);
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Arimo', sans-serif;
-            font-size: 1rem;
-            color: var(--gold-light);
-            transition: all 0.3s;
+            margin-top: 30px; padding: 12px 30px; background: transparent;
+            border: 1px solid var(--gold-mid); border-radius: 50px;
+            cursor: pointer; font-family: 'Arimo', sans-serif; font-size: 1rem;
+            color: var(--gold-light); transition: all 0.3s;
         }
 
-        .notify-btn.gold {
-            -webkit-text-fill-color: var(--gold-light) !important;
-            color: var(--gold-light) !important;
-        }
-
-        .notify-btn:hover {
-            background: var(--gold-mid);
-            color: #000 !important;
-            -webkit-text-fill-color: #000 !important;
-        }
+        .notify-btn.gold { -webkit-text-fill-color: var(--gold-light) !important; color: var(--gold-light) !important; }
+        .notify-btn:hover { background: var(--gold-mid); color: #000 !important; -webkit-text-fill-color: #000 !important; }
 
         .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 10, 10, 0.95);
-            border: 1.5px solid var(--gold-mid);
-            padding: 30px;
-            border-radius: 15px;
-            z-index: 1000;
-            width: 90%;
-            max-width: 400px;
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.95); border: 1.5px solid var(--gold-mid);
+            padding: 30px; border-radius: 15px; z-index: 1000; width: 90%; max-width: 400px;
             box-shadow: 0 0 30px rgba(179, 135, 40, 0.3);
         }
-
         .modal.active { display: block; }
-
         .modal input, .modal select {
-            background: #111;
-            border: 1px solid rgba(179, 135, 40, 0.5);
-            color: var(--gold-white);
-            padding: 12px;
-            margin: 8px 0 20px 0;
-            width: 100%;
-            border-radius: 8px;
-            outline: none;
+            background: #111; border: 1px solid rgba(179, 135, 40, 0.5);
+            color: var(--gold-white); padding: 12px; margin: 8px 0 20px 0;
+            width: 100%; border-radius: 8px; outline: none;
         }
-
-        .modal label {
-            display: block;
-            text-align: left;
-            font-size: 0.9rem;
-            color: var(--gold-mid);
-        }
-
-        .status-tag {
-            font-size: 1rem;
-            margin-top: 15px;
-            color: var(--gold-light);
-            display: none;
-        }
+        .modal label { display: block; text-align: left; font-size: 0.9rem; color: var(--gold-mid); }
+        .status-tag { font-size: 1rem; margin-top: 15px; color: var(--gold-light); display: none; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -211,13 +114,13 @@
         <span id="price-value" class="gold">7,834.50</span><span class="currency gold">le</span>
     </div>
 
-    <button class="notify-btn gold" onclick="openModal()">set alert</button>
-    <div id="alert-status" class="status-tag">alert active...</div>
+    <button class="notify-btn gold" id="main-notify-btn" onclick="handleNotifyClick()">set alert</button>
+    <div id="alert-status" class="status-tag" onclick="clearAlert()">alert active... (click to cancel)</div>
 </div>
 
 <div id="notifyModal" class="modal">
     <h3 class="gold">alert settings</h3>
-    <label>target price (le)</label>
+    <label>target price (le) - rings if equal or higher</label>
     <input type="number" id="targetPrice" step="0.01">
     <label>select karat</label>
     <select id="targetKarat">
@@ -234,6 +137,11 @@
 </div>
 
 <script>
+    // Register Service Worker for System Notifications (Cross-platform support)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('data:text/javascript;base64,' + btoa('self.addEventListener("push", e => {});'));
+    }
+
     let base24kPrice = 7834.50;
     let currentKarat = 24;
     const apiKey = "sk_76C084a8211A6551c0f887290fb164DbAD82316F0f176661";
@@ -270,22 +178,43 @@
         if (!alertActive) return;
         const currentAlertPrice = base24kPrice * (targetKarat / 24);
         
-        if (currentAlertPrice.toFixed(2) === parseFloat(targetPrice).toFixed(2)) {
+        if (currentAlertPrice >= parseFloat(targetPrice)) {
             hitCounter++;
             if (hitCounter >= requiredHits) {
-                sendNotification(currentAlertPrice);
-                clearAlert(); // Wipe from Chrome/Browser storage after firing
+                sendSystemNotification(currentAlertPrice);
+                clearAlert(); 
             }
         } else { hitCounter = 0; }
     }
 
-    function sendNotification(price) {
+    async function sendSystemNotification(price) {
+        const title = "Gold Price Alert!";
+        const options = {
+            body: `${targetKarat}k Gold is now ${price.toFixed(2)} le!`,
+            icon: 'https://cdn-icons-png.flaticon.com/512/261/261835.png',
+            vibrate: [200, 100, 200],
+            requireInteraction: true 
+        };
+
         if (Notification.permission === "granted") {
-            new Notification("Gold Alert!", { body: `${targetKarat}k reached ${price.toFixed(2)} le.` });
-        } else { alert(`Alert! ${targetKarat}k is ${price.toFixed(2)} le.`); }
+            const reg = await navigator.serviceWorker.ready;
+            reg.showNotification(title, options);
+        }
     }
 
-    // --- Persistence Logic ---
+    function handleNotifyClick() {
+        // If permission is already granted, just open the modal
+        if (Notification.permission === "granted") {
+            openModal();
+        } else {
+            // Otherwise, request permission once
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") openModal();
+                else alert("Notifications are blocked. Please enable them in browser settings.");
+            });
+        }
+    }
+
     function setNotification() {
         targetPrice = document.getElementById('targetPrice').value;
         targetKarat = document.getElementById('targetKarat').value;
@@ -315,21 +244,20 @@
         alertActive = true;
         hitCounter = 0;
         
-        document.getElementById('alert-status').innerText = `watching for ${targetKarat}k at ${targetPrice} le...`;
-        document.getElementById('alert-status').style.display = 'block';
+        const status = document.getElementById('alert-status');
+        status.innerText = `watching for ${targetKarat}k >= ${targetPrice} le... (click to cancel)`;
+        status.style.display = 'block';
+        document.getElementById('main-notify-btn').style.display = 'none';
     }
 
     function clearAlert() {
         alertActive = false;
         localStorage.removeItem('goldAlert');
         document.getElementById('alert-status').style.display = 'none';
+        document.getElementById('main-notify-btn').style.display = 'inline-block';
     }
 
-    function openModal() {
-        document.getElementById('notifyModal').classList.add('active');
-        Notification.requestPermission();
-    }
-
+    function openModal() { document.getElementById('notifyModal').classList.add('active'); }
     function closeModal() { document.getElementById('notifyModal').classList.remove('active'); }
     function toggleMenu(e) { e.stopPropagation(); document.getElementById('karat-menu').classList.toggle('active'); }
     function selectKarat(k) {
@@ -341,7 +269,7 @@
 
     window.onclick = () => document.getElementById('karat-menu').classList.remove('active');
 
-    // Startup
+    // Startup Logic
     loadSavedAlert();
     refreshBasePrice();
     setInterval(() => { base24kPrice += (Math.random() - 0.5) * 0.4; updateUI(); }, 3000);
